@@ -1,4 +1,4 @@
-import praw, csv, time, sys
+import praw, csv, time, sys, argparse
 from prawcore import PrawcoreException
 
 def authenticate():
@@ -26,10 +26,19 @@ def run(reddit, submission_url):
     except TypeError:
         raise
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--url', help='Stores the Reddit thread URL to track', required=True)
+
+    args = parser.parse_args()
+    url = args.url
+
+    return url
+
 if __name__ == "__main__":
     try:
+        url = get_args()
         reddit = authenticate()
-        url = ""
         run(reddit, url)
     except praw.exceptions.ClientException:
         print("There's an error in your `praw.ini` file.")
@@ -37,4 +46,3 @@ if __name__ == "__main__":
         print("Error:", e, ". Check your link or `praw.ini` file.")
     except TypeError:
         print("Invalid URL provided.")
-    # set up args for url
